@@ -1,27 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-  <el-button type="primary">Primary</el-button>
+  <UniformHead />
+  <LoginComp/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import UniformHead from "@/components/UniformHead.vue";
+import LoginComp from "@/components/LoginComp.vue";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    UniformHead, LoginComp
   }
 }
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
