@@ -1,13 +1,15 @@
 import axios from 'axios'
 
-const serviceApi = axios.create({
-    baseURL: 'http://127.0.0.1:8000//api',
-    timeout: 1000,
-    withCredentials: true
+const requestHelper = axios.create({
+    timeout: 20000, // 请求超时时间,
+    headers: {
+        //关键
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    }
 })
 
 // 添加请求拦截器
-serviceApi.interceptors.request.use(
+requestHelper.interceptors.request.use(
     function (config) {
         // 在发送请求之前做些什么
         return config
@@ -20,9 +22,8 @@ serviceApi.interceptors.request.use(
 )
 
 // 添加响应拦截器
-serviceApi.interceptors.response.use(
+requestHelper.interceptors.response.use(
     function (response) {
-        console.log(response)
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
         // dataAxios 是 axios 返回数据中的 data
@@ -38,4 +39,4 @@ serviceApi.interceptors.response.use(
 )
 
 
-export default serviceApi
+export default requestHelper

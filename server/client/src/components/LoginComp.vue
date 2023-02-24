@@ -2,13 +2,13 @@
   <form class="login-form">
     <p>登录</p>
     <div class="login-form-item">
-      <el-input v-model="form.username" placeholder="用户名" size="large"/>
+      <el-input v-model="formData.username" placeholder="用户名" size="large"/>
     </div>
     <div class="login-form-item">
-      <el-input v-model="form.password" placeholder="密码" type="password" size="large"/>
+      <el-input v-model="formData.password" placeholder="密码" type="password" size="large"/>
     </div>
     <div class="login-form-item">
-      <el-input v-model="form.cert" placeholder="验证码" size="large"/>
+      <el-input v-model="formData.cert" placeholder="验证码" size="large"/>
     </div>
     <el-button type="primary" @click="onSubmit" size="large">登录</el-button>
   </form>
@@ -16,27 +16,24 @@
 
 <script>
 import { reactive } from 'vue'
-import serviceApi from "@/axiosInstance";
+import {TryLogin} from "@/services/serviceRequest";
 export default {
   name: "LoginComp",
   data(){
     return{
-      form: reactive({
+      formData: {
         username: '',
         password: '',
         cert: ''
-      })
+      }
     }
   },
-  methods:{
-    onSubmit(){
-      serviceApi({
-        url:'/user/login',
-        method: 'post',
-        data: this.form
-      }).then(response => {
-        alert(response.data)
-      })
+  methods: {
+    onSubmit() {
+      TryLogin(this.formData)
+          .then(response => {
+            alert(response.status)
+          })
     }
   }
 }
