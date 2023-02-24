@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import serviceApi from "@/services/serviceApi";
 export default {
   name: "LoginComp",
@@ -32,7 +31,7 @@ export default {
     onSubmit() {
       serviceApi.TryLogin(this.formData)
           .then(response => {
-            alert(response.status)
+            alert(serviceApi.GetApiResultExplain(response))
           })
     }
   }
@@ -43,7 +42,7 @@ export default {
 <style scoped>
 .login-form{
   width: 400px;
-  height: 400px;
+  height: 380px;
   margin: 120px auto;
   text-align: center;
   border-radius: 10px;
