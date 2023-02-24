@@ -1,24 +1,22 @@
 <template>
-  <el-form class="login-form">
-    <el-form-item />
-      <p>登录</p>
-    <el-form-item>
-      <el-input v-model="form.username" placeholder="用户名" />
-    </el-form-item>
-    <el-form-item>
-      <el-input v-model="form.password" placeholder="密码" type="password" />
-    </el-form-item>
-    <el-form-item>
-      <el-input v-model="form.cert" placeholder="验证码"/>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit" size="large">登录</el-button>
-    </el-form-item>
-  </el-form>
+  <form class="login-form">
+    <p>登录</p>
+    <div class="login-form-item">
+      <el-input v-model="form.username" placeholder="用户名" size="large"/>
+    </div>
+    <div class="login-form-item">
+      <el-input v-model="form.password" placeholder="密码" type="password" size="large"/>
+    </div>
+    <div class="login-form-item">
+      <el-input v-model="form.cert" placeholder="验证码" size="large"/>
+    </div>
+    <el-button type="primary" @click="onSubmit" size="large">登录</el-button>
+  </form>
 </template>
 
 <script>
 import { reactive } from 'vue'
+import serviceApi from "@/axiosInstance";
 export default {
   name: "LoginComp",
   data(){
@@ -32,7 +30,13 @@ export default {
   },
   methods:{
     onSubmit(){
-      alert(this.form.username + " " + this.form.password + " " + this.form.cert)
+      serviceApi({
+        url:'/user/login',
+        method: 'post',
+        data: this.form
+      }).then(response => {
+        alert(response.data)
+      })
     }
   }
 }
@@ -41,15 +45,24 @@ export default {
 
 <style scoped>
 .login-form{
-  width: 480px;
+  width: 400px;
   height: 400px;
   margin: 120px auto;
   text-align: center;
+  border-radius: 10px;
+  border: 1px solid var(--el-border-color);
+  box-shadow: var(--el-box-shadow-dark);
 }
+
+.login-form-item{
+  width: 84%;
+  margin-left: 8%;
+  margin-right: 8%;
+  margin-bottom: 20px;
+}
+
 p{
   font-size: 28px;
 }
-el-form-item{
-  width: 80%;
-}
+
 </style>
