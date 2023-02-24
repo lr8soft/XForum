@@ -5,7 +5,8 @@ const requestHelper = axios.create({
     headers: {
         //关键
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    }
+    },
+    withCredentials: true
 })
 
 // 添加请求拦截器

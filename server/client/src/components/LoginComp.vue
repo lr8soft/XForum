@@ -16,7 +16,7 @@
 
 <script>
 import { reactive } from 'vue'
-import {TryLogin} from "@/services/serviceRequest";
+import serviceApi from "@/services/serviceApi";
 export default {
   name: "LoginComp",
   data(){
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      TryLogin(this.formData)
+      serviceApi.TryLogin(this.formData)
           .then(response => {
             alert(response.status)
           })
