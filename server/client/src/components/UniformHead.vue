@@ -5,8 +5,7 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      :ellipsis="false"
-      @select="handleSelect">
+      :ellipsis="false">
     <!--这标题呢-->
     <el-menu-item index="1">{{title}}</el-menu-item>
     <div class="flex-grow" />

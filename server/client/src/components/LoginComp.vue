@@ -16,6 +16,7 @@
 
 <script>
 import serviceApi from "@/services/serviceApi";
+import globalData from "@/services/globalData";
 export default {
   name: "LoginComp",
   data(){
@@ -31,7 +32,8 @@ export default {
     onSubmit() {
       serviceApi.TryLogin(this.formData)
           .then(response => {
-            alert(serviceApi.GetApiResultExplain(response))
+            globalData.setIsLogin(this.config, serviceApi.GetApiResult(response))
+            alert(globalData.getIsLogin(this.config))
           })
     }
   }
