@@ -1,21 +1,20 @@
-import {getCurrentInstance, onMounted} from "vue";
+import {defineStore} from "pinia";
 
-export default {
-    setup(){
-        const { proxy } = getCurrentInstance();
-        onMounted(()=>{
-            proxy.$isLogin = false
-            proxy.$token = ''
-        })
+export const useGlobalData = defineStore('globaldata',{
+    state: () => ({
+        is_login: false,
+        user_token: ''
+    }),
+    getters: {
+        isLogin: (state) => state.is_login,
+        token: (state) => state.user_token
     },
-
-    getIsLogin(){
-        const { proxy } = getCurrentInstance()
-        return proxy.$isLogin
-    },
-    setIsLogin(value){
-        const { proxy } = getCurrentInstance()
-        print(proxy)
-        proxy.$isLogin = value
+    actions: {
+        setIsLogin(value){
+            this.is_login = value
+        },
+        setToken(value){
+            this.user_token = value
+        }
     }
-}
+})

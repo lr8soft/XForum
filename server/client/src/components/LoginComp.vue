@@ -16,7 +16,8 @@
 
 <script>
 import serviceApi from "@/services/serviceApi";
-import globalData from "@/services/globalData";
+import {useGlobalData} from "@/services/globalData";
+
 export default {
   name: "LoginComp",
   data(){
@@ -25,15 +26,15 @@ export default {
         username: '',
         password: '',
         cert: ''
-      }
+      },
+      userData: useGlobalData()
     }
   },
   methods: {
     onSubmit() {
       serviceApi.TryLogin(this.formData)
           .then(response => {
-            globalData.setIsLogin(this.config, serviceApi.GetApiResult(response))
-            alert(globalData.getIsLogin(this.config))
+            this.userData.setIsLogin(serviceApi.GetApiResult(response))
           })
     }
   }

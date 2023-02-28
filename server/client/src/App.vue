@@ -1,17 +1,30 @@
 <template>
-  <UniformHead />
-  <LoginComp/>
+  <UniformHead/>
+  <div v-if="userData.isLogin">
+    <ThreadComp/>
+  </div>
+  <div v-else>
+    <LoginComp/>
+  </div>
   <RegistComp/>
 </template>
 
 <script>
 import UniformHead from "@/components/UniformHead.vue";
-import LoginComp from "@/components/LoginComp.vue";
 import RegistComp from "@/components/RegistComp.vue";
+import LoginComp from "@/components/LoginComp.vue";
+import {useGlobalData} from "@/services/globalData";
+import ThreadComp from "@/components/ThreadComp.vue";
 export default {
   name: 'App',
+  data(){
+    return{
+      userData: useGlobalData()
+    }
+  },
   components: {
-    UniformHead, LoginComp, RegistComp
+    ThreadComp,
+    UniformHead, RegistComp, LoginComp
   }
 }
 </script>
