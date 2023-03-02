@@ -1,5 +1,5 @@
 <template>
-  <form class="login-form">
+  <el-form class="login-form">
     <p>登录</p>
     <div class="login-form-item">
       <el-input v-model="formData.username" placeholder="用户名" size="large"/>
@@ -8,10 +8,14 @@
       <el-input v-model="formData.password" placeholder="密码" type="password" size="large"/>
     </div>
     <div class="login-form-item">
-      <el-input v-model="formData.cert" placeholder="验证码" size="large"/>
-    </div>
     <el-button type="primary" @click="onSubmit" size="large">登录</el-button>
-  </form>
+    </div>
+
+    <div class="login-form-item">
+      <router-link to="/regist">没有账号？点此注册</router-link>
+    </div>
+  </el-form>
+
 </template>
 
 <script>
@@ -24,8 +28,7 @@ export default {
     return{
       formData: {
         username: '',
-        password: '',
-        cert: ''
+        password: ''
       },
       userData: useGlobalData()
     }
@@ -35,6 +38,9 @@ export default {
       serviceApi.TryLogin(this.formData)
           .then(response => {
             this.userData.setIsLogin(serviceApi.GetApiResult(response))
+            this.$router.push({
+              path: "/"
+            })
           })
     }
   }
@@ -45,7 +51,7 @@ export default {
 <style scoped>
 .login-form{
   width: 400px;
-  height: 380px;
+  height: 320px;
   margin: 120px auto;
   text-align: center;
   border-radius: 10px;
@@ -62,6 +68,15 @@ export default {
 
 p{
   font-size: 28px;
+}
+
+router-link{
+  font-size: 15px;
+  color: lightgrey;
+}
+a{
+  font-size: 15px;
+  color: lightgrey;
 }
 
 </style>

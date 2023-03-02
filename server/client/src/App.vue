@@ -1,20 +1,17 @@
 <template>
-  <UniformHead/>
-  <div v-if="userData.isLogin">
-    <ThreadComp/>
-  </div>
-  <div v-else>
-    <LoginComp/>
-  </div>
-  <RegistComp/>
+  <el-container>
+    <el-header>
+      <UniformHead/>
+    </el-header>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
 import UniformHead from "@/components/UniformHead.vue";
-import RegistComp from "@/components/RegistComp.vue";
-import LoginComp from "@/components/LoginComp.vue";
 import {useGlobalData} from "@/services/globalData";
-import ThreadComp from "@/components/ThreadComp.vue";
 export default {
   name: 'App',
   data(){
@@ -23,8 +20,7 @@ export default {
     }
   },
   components: {
-    ThreadComp,
-    UniformHead, RegistComp, LoginComp
+    UniformHead
   }
 }
 </script>

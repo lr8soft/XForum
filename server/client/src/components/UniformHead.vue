@@ -1,28 +1,35 @@
 <template>
-  <el-menu
-      :default-active="activeIndex"
-      mode="horizontal"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      :ellipsis="false">
-    <!--这标题呢-->
-    <el-menu-item index="1">{{title}}</el-menu-item>
-    <div class="flex-grow" />
-    <el-menu-item index="2">首页</el-menu-item>
-    <el-menu-item index="3">分区</el-menu-item>
-    <el-menu-item index="4">个人空间</el-menu-item>
+  <div>
+    <el-menu
+        :default-active="activeIndex"
+        mode="horizontal"
+        active-text-color="#007FFF"
+        :ellipsis="false">
+      <!--这标题呢-->
+      <el-menu-item index="1">XForum</el-menu-item>
+      <div class="flex-grow"/>
+      <el-menu-item index="2">
+        <router-link to="/">首页</router-link>
+      </el-menu-item>
+      <el-menu-item index="3">分区</el-menu-item>
+      <el-menu-item index="4">
+        <router-link to="" v-if="userData.isLogin">个人空间</router-link>
+        <router-link to="/login" v-else>登录</router-link>
+      </el-menu-item>
 
-  </el-menu>
+    </el-menu>
+  </div>
+
 </template>
 
 <script>
+import {useGlobalData} from "@/services/globalData";
+
 export default {
   name: "UniformHead",
-  props:{
-    title: {
-      type: String,
-      default: ()=> "XForum"
+  data() {
+    return {
+      userData: useGlobalData()
     }
   }
 }
@@ -31,5 +38,11 @@ export default {
 <style scoped>
 .flex-grow {
   flex-grow: 1;
+}
+a{
+  text-decoration: none;
+}
+.router-link-active {
+  text-decoration: none;
 }
 </style>

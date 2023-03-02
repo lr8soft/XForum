@@ -13,9 +13,6 @@
   <div class="regist-form-item">
       <el-input v-model="formData.email" placeholder="电子邮箱" size="large"/>
   </div>
-  <div class="regist-form-item">
-    <el-input v-model="formData.cert" placeholder="验证码" size="large"/>
-  </div>
   <el-button type="primary" @click="onSubmit" size="large">注册</el-button>
   </form>
 </template>
@@ -47,8 +44,8 @@ export default {
 <style scoped>
 .regist-form{
   width: 400px;
-  height: 450px;
-  margin: 120px auto;
+  height: 400px;
+  margin: 80px auto;
   text-align: center;
   border-radius: 10px;
   border: 1px solid var(--el-border-color);
