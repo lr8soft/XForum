@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import {ElMessage} from "element-plus";
 import serviceApi from "@/services/serviceApi";
 import {useGlobalData} from "@/services/globalData";
 
@@ -37,10 +38,20 @@ export default {
     onSubmit() {
       serviceApi.TryLogin(this.formData)
           .then(response => {
+            var result = serviceApi.GetApiResult(response)
             this.userData.setIsLogin(serviceApi.GetApiResult(response))
-            this.$router.push({
-              path: "/"
-            })
+            if(result){
+              ElMessage({
+                message: "登录成功",
+                type: 'success'
+              })
+              this.$router.push('/')
+            }else{
+              ElMessage({
+                message: serviceApi.GetApiResultExplain(response),
+                type: 'error'
+              })
+            }
           })
     }
   }
