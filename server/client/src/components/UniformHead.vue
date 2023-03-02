@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-menu
-        :default-active="activeIndex"
         mode="horizontal"
         active-text-color="#007FFF"
         :ellipsis="false">

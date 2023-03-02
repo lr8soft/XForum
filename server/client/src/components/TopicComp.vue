@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
 #topic-body{
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 </style>
