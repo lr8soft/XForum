@@ -16,19 +16,30 @@
           </div>
         </template>
 
-        <el-container>
-          <el-aside class="user-plate">
-            <el-image class="avatar-image" :src="avatar" fit="fill">
-              <template #error>
-                <el-image class="avatar-image" :src="require('@/assets/defaultAvatar.png')" fit="fill"/>
-              </template>
-            </el-image>
-            <p>{{author}}</p>
-          </el-aside>
-          <el-main>
-              <p class="article-area">{{article}}</p>
-          </el-main>
-        </el-container>
+        <!--下面这堆是回复-->
+        <el-table :data="replies" class="reply-table">
+          <el-table-column>
+            <template #default="scope">
+              <el-container>
+                <!--左边的用户信息区域-->
+                <el-aside class="user-plate">
+                  <el-image class="avatar-image" :src="scope.row.avatar" fit="fill">
+                    <template #error>
+                      <el-image class="avatar-image" :src="require('@/assets/defaultAvatar.png')" fit="fill"/>
+                    </template>
+                  </el-image>
+                  <p class="author-info">{{ scope.row.author }}</p>
+                  <p class="floor-info">{{ scope.row.floor + 1 }}#</p>
+                </el-aside>
+                <!--右边回复区域-->
+                <el-main>
+                  <p class="article-area">{{ scope.row.reply }}</p>
+                </el-main>
+              </el-container>
+            </template>
+
+          </el-table-column>
+        </el-table>
 
       </el-card>
     </el-main>
@@ -41,21 +52,26 @@
 export default {
   name: "TopicComp",
   data(){
-    return{
+    return {
       title: "测试主题",
-      article: "这是正文这是正文",
-      author: "lrsoft",
-      avatar: "upload/defaultAvatar.png",
-      replies: [{
+      replies: [
+        {
+          author: "lrsoft",
+          avatar: "/upload/defaultAvatar.png",
+          reply: "前面忘了，中间忘了，后面也忘了",
+          floor: 0
+        },{
         author: "testuser1",
         avatar: "/upload/defaultAvatar.png",
-        reply: "这是回复！</br>TEST!!!!!!!!"
+        reply: "这是回复！TEST!!!!!!!!",
+        floor: 1
       },
         {
-        author: "testuser2",
-        avatar: "/upload/defaultAvatar.png",
-        reply: "Hello world!"
-      }]
+          author: "testuser2",
+          avatar: "/upload/defaultAvatar.png",
+          reply: "Hello world!",
+          floor: 2
+        }]
     }
   }
 }
@@ -78,9 +94,13 @@ export default {
   font-weight: bold;
 }
 
+.reply-table{
+  --el-table-border-color: none;
+}
+
 .user-plate{
   width: 120px;
-  height: 160px;
+  height: 200px;
   padding-top: 20px;
   align-items: center;
   text-align: center;
@@ -95,7 +115,17 @@ export default {
 
 .article-area{
   width: 90%;
-  margin: 0px auto;
+  margin: auto;
+}
+
+.author-info{
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.floor-info{
+  font-size: 14px;
+  color: lightgrey;
 }
 
 </style>

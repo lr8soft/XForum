@@ -4,7 +4,9 @@
         mode="horizontal"
         active-text-color="#007FFF"
         :ellipsis="false">
-      <el-menu-item id="title-name" index="1">XForum</el-menu-item>
+      <el-menu-item id="title-name" index="1">
+        <router-link to="/">XForum</router-link>
+      </el-menu-item>
       <div class="flex-grow"/>
       <el-menu-item index="2">
         <router-link to="/">首页</router-link>

@@ -1,14 +1,14 @@
 <template>
   <div id="thread-body">
-    <el-table :data="tableData">
-      <el-table-column prop="title" label="标题">
+    <el-table :data="tableData" >
+      <el-table-column prop="title" label="标题" align="left">
         <template #default="scope">
-          <el-link v-bind:href='"/topic/"+scope.row.id' target="_blank">{{scope.row.title}}</el-link>
-          <el-link></el-link>
+          <router-link v-bind:to='"/topic/"+scope.row.id'>{{scope.row.title}}</router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="date" label="日期" width="180" />
-      <el-table-column prop="name" label="用户" width="180" />
+      <el-table-column prop="name" label="用户" width="180" align="left" />
+      <el-table-column prop="date" label="日期" width="180" align="left"/>
+
     </el-table>
   </div>
 </template>
