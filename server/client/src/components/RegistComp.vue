@@ -18,6 +18,7 @@
 </template>
 <script>
 import serviceApi from "@/services/serviceApi";
+import {ElMessage} from "element-plus";
 export default {
   name: "RegistComp",
   data(){
@@ -34,7 +35,19 @@ export default {
     onSubmit(){
       serviceApi.TryRegist(this.formData)
           .then(response=>{
-            alert(serviceApi.GetApiResultExplain(response))
+            if(serviceApi.GetApiResult(response)){
+              ElMessage({
+                message: '注册成功',
+                type: 'success'
+              })
+              this.$router.push('/login')
+            }else{
+              ElMessage({
+                message: serviceApi.GetApiResultExplain(response),
+                type: 'error'
+              })
+            }
+
           })
     }
   }

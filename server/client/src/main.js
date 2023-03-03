@@ -3,7 +3,7 @@ import ElementPlus from 'element-plus'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 
-import * as ElementIcons from '@element-plus/icons-vue'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/index.css'
 
 import router from "@/router";
@@ -11,8 +11,8 @@ import router from "@/router";
 const pinia = createPinia()
 const app = createApp(App)
 
-for (const key in ElementIcons) {
-    app.component(key, ElementIcons[key])
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
 }
 
 app.use(pinia)

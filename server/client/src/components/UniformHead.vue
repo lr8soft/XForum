@@ -4,8 +4,7 @@
         mode="horizontal"
         active-text-color="#007FFF"
         :ellipsis="false">
-      <!--这标题呢-->
-      <el-menu-item index="1">XForum</el-menu-item>
+      <el-menu-item id="title-name" index="1">XForum</el-menu-item>
       <div class="flex-grow"/>
       <el-menu-item index="2">
         <router-link to="/">首页</router-link>
@@ -35,6 +34,11 @@ export default {
 </script>
 
 <style scoped>
+#title-name{
+  font-size: 28px;
+  font-weight: bold;
+}
+
 .flex-grow {
   flex-grow: 1;
 }

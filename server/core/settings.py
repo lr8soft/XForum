@@ -127,7 +127,8 @@ CORS_ORIGIN_WHITELIST = (
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'client/dist/static')
+    os.path.join(BASE_DIR, 'client/dist/static'),
+    os.path.join(BASE_DIR, 'upload'),
 ]
 STATIC_URL = '/static/'
 
