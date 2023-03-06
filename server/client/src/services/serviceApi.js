@@ -28,6 +28,15 @@ export default {
             method: "post"
         })
     },
+    CreateNewTopic(formData){
+        return requestHelper({
+            url: urlHead + "/topic/create_new_topic",
+            method: "post",
+            data: formData
+        })
+    },
+
+
     GetApiResult(response){
         if(response.status == "operation_success")
             return true
@@ -37,7 +46,8 @@ export default {
         if(response.status in statusExplain)
             return statusExplain[response.status]
         return "未知错误"
-    }
+    },
+
 }
 
 

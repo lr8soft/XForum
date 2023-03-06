@@ -11,13 +11,39 @@
 
     </el-table>
   </div>
+
+  <el-card class="create-topic-card">
+    <template #header>
+      <div class="card-header">
+        <span>发表新主题</span>
+      </div>
+    </template>
+    <el-input v-model="formData.title" placeholder="标题"/>
+    <div style="margin: 5px 0" />
+    <el-input
+        v-model="formData.article"
+        :autosize="{ minRows: 4}"
+        type="textarea"
+        placeholder="内容"
+    />
+    <div style="margin: 5px 0" />
+    <el-button type="primary" @click="submitNewTopic" :disabled="!userData.isLogin">发布</el-button>
+  </el-card>
 </template>
 
 <script>
+import serviceApi from "@/services/serviceApi";
+import {ElMessage} from "element-plus";
+import {useGlobalData} from "@/services/globalData";
+
 export default {
   name: "ThreadComp",
   data() {
     return {
+      formData: {
+        title: '',
+        article: ''
+      },
       tableData: [
         {
           date: '2023-03-02',
@@ -31,7 +57,28 @@ export default {
           title: 'Hello world',
           id: 1
         }
-      ]
+      ],
+      userData: useGlobalData()
+    }
+  },
+  methods: {
+    submitNewTopic() {
+      serviceApi.CreateNewTopic(this.formData).then(response =>{
+        var result = serviceApi.GetApiResult(response)
+        if(result){
+          ElMessage({
+            message: "发布成功",
+            type: 'success'
+          })
+          this.$router.push('/')
+        }else{
+          ElMessage({
+            message: serviceApi.GetApiResultExplain(response),
+            type: 'error'
+          })
+        }
+
+      })
     }
   }
 }
@@ -41,5 +88,16 @@ export default {
 #thread-body{
   width: 90%;
   margin: auto;
+}
+
+.create-topic-card{
+  width: 90%;
+  margin: 20px auto;
+}
+
+.card-header {
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
 }
 </style>

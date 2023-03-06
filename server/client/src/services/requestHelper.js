@@ -1,12 +1,12 @@
 import axios from 'axios'
 
+axios.defaults.withCredentials=true
 const requestHelper = axios.create({
     timeout: 20000, // 请求超时时间,
     headers: {
         //关键
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-    withCredentials: true
+    }
 })
 
 // 添加请求拦截器
