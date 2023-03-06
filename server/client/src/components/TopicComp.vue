@@ -12,7 +12,7 @@
       <el-card class="box-card">
         <template #header>
           <div class="card-header">
-            <span>{{title}}</span>
+            <span>{{ title }}</span>
           </div>
         </template>
 
@@ -37,10 +37,35 @@
                 </el-main>
               </el-container>
             </template>
-
           </el-table-column>
-        </el-table>
 
+        </el-table>
+        <div class="replies-pagination">
+          <el-pagination
+              v-model:current-page="currentPage"
+              layout="prev, pager, next, jumper"
+              :total="repliesCount"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
+        </div>
+
+      </el-card>
+
+      <!--这是用户回复区，一页显示10个回复-->
+      <el-card class="create-reply-card">
+        <template #header>
+          <div class="card-header">
+            <span>发表回复</span>
+          </div>
+        </template>
+        <el-input
+            v-model="replyInfo"
+            :autosize="{ minRows: 4}"
+            type="textarea"
+            placeholder="发表你的看法"
+        />
+        <el-button class="create-reply-button" type="primary" @click="submitMessage">发布</el-button>
       </el-card>
     </el-main>
 
@@ -48,12 +73,17 @@
 </template>
 
 <script>
+import {ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "TopicComp",
   data(){
     return {
       title: "测试主题",
+      currentPage: 1,
+      repliesCount: 20,
+      replyInfo: '',
       replies: [
         {
           author: "lrsoft",
@@ -73,8 +103,23 @@ export default {
           floor: 2
         }]
     }
+  },
+  methods:{
+    handleSizeChange(val){
+      console.log(`${val} items per page`)
+    },
+    handleCurrentChange(val){
+      console.log(`current page: ${val}`)
+    },
+    submitMessage(){
+      ElMessage({
+        message: "发布成功",
+        type: 'success'
+      })
+    }
   }
 }
+
 </script>
 
 <style scoped>
@@ -88,6 +133,15 @@ export default {
   margin: auto;
 }
 
+.create-reply-card{
+  width: 90%;
+  margin: 20px auto;
+}
+
+.create-reply-button{
+  margin-top: 5px;
+}
+
 .card-header {
   justify-content: space-between;
   align-items: center;
@@ -96,6 +150,11 @@ export default {
 
 .reply-table{
   --el-table-border-color: none;
+}
+
+.replies-pagination{
+  align-items: center;
+  margin: 5px auto;
 }
 
 .user-plate{
