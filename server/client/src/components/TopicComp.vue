@@ -29,11 +29,11 @@
                     </template>
                   </el-image>
                   <p class="author-info">{{ scope.row.author }}</p>
-                  <p class="floor-info">{{ scope.row.floor + 1 }}#</p>
+                  <p class="floor-info">{{ scope.row.floor }}#</p>
                 </el-aside>
                 <!--右边回复区域-->
                 <el-main>
-                  <p class="article-area">{{ scope.row.reply }}</p>
+                  <p class="article-area">{{ scope.row.article }}</p>
                 </el-main>
               </el-container>
             </template>
@@ -60,12 +60,12 @@
           </div>
         </template>
         <el-input
-            v-model="replyInfo"
+            v-model="replyFormData.reply"
             :autosize="{ minRows: 4}"
             type="textarea"
             placeholder="发表你的看法"
         />
-        <el-button class="create-reply-button" type="primary" @click="submitMessage">发布</el-button>
+        <el-button class="create-reply-button" type="primary" @click="submitMessage" :disabled="!userData.isLogin">发布</el-button>
       </el-card>
     </el-main>
 
@@ -73,35 +73,40 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {getCurrentInstance, onMounted, ref} from "vue";
 import {ElMessage} from "element-plus";
+import serviceApi from "@/services/serviceApi";
+import {useRoute} from "vue-router";
+import {useGlobalData} from "@/services/globalData";
 
 export default {
   name: "TopicComp",
+  setup(){
+    const route = useRoute()
+    const instance = getCurrentInstance()
+    onMounted(()=>{
+      var topicId = route.params.id
+      instance.data.replyFormData.id = topicId
+      // 读取主题下面的帖子
+      serviceApi.GetAllReplies(topicId).then(response=>{
+        if(serviceApi.GetApiResult(response)){
+          instance.data.replies = response.result
+          instance.data.repliesCount = response.result.length
+        }
+      })
+    })
+  },
   data(){
     return {
       title: "测试主题",
       currentPage: 1,
-      repliesCount: 20,
-      replyInfo: '',
-      replies: [
-        {
-          author: "lrsoft",
-          avatar: "/upload/defaultAvatar.png",
-          reply: "前面忘了，中间忘了，后面也忘了",
-          floor: 0
-        },{
-        author: "testuser1",
-        avatar: "/upload/defaultAvatar.png",
-        reply: "这是回复！TEST!!!!!!!!",
-        floor: 1
+      repliesCount: 0,
+      replies: [],
+      replyFormData:{
+        id: 0,
+        reply:''
       },
-        {
-          author: "testuser2",
-          avatar: "/upload/defaultAvatar.png",
-          reply: "Hello world!",
-          floor: 2
-        }]
+      userData: useGlobalData()
     }
   },
   methods:{
@@ -112,10 +117,22 @@ export default {
       console.log(`current page: ${val}`)
     },
     submitMessage(){
-      ElMessage({
-        message: "发布成功",
-        type: 'success'
+      // 在帖子下创建新回复
+      serviceApi.CreateNewReply(this.replyFormData).then(response=>{
+        if(serviceApi.GetApiResult(response)){
+          ElMessage({
+            message: "发布成功",
+            type: 'success'
+          })
+        }else{
+          ElMessage({
+            message: serviceApi.GetApiResultExplain(response),
+            type: 'error'
+          })
+        }
       })
+
+
     }
   }
 }

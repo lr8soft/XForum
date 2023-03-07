@@ -20,3 +20,5 @@ class ErrorResponse(Enum):
 	INCOMPLETE_DATA = "incomplete_data"
 	OPERATION_SUCCESS = "operation_success"
 	OPERATION_FAIL = "operation_fail"
+
+	TOPIC_NOT_EXIST = "topic_not_exist"

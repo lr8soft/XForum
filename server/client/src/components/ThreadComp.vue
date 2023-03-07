@@ -55,9 +55,9 @@ export default {
     onMounted(()=>{
       serviceApi.GetAllTopics().then(response=>{
         var result = serviceApi.GetApiResult(response)
-        console.log(response)
         if(result){
           instance.data.topicData = response.result
+          instance.data.topicCount = response.result.length
         }
       })
     })
@@ -65,19 +65,12 @@ export default {
   data() {
     return {
       currentPage: 1,
-      topicCount: 20,
+      topicCount: 0,
       formData: {
         title: '',
         article: ''
       },
-      topicData: [
-        {
-          date: '2023-03-07T00:50:10.308Z',
-          author: 'LT_',
-          title: '测试测试',
-          id: 0
-        }
-      ],
+      topicData: [],
       userData: useGlobalData()
     }
   },

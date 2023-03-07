@@ -8,7 +8,7 @@ class EnumResponse:
 	def __init__(self, result: ErrorResponse = ErrorResponse.OPERATION_SUCCESS):
 		self.response = {"status": result.value}
 
-	def setResponseValue(self, result: ErrorResponse):
+	def setStatus(self, result: ErrorResponse):
 		self.response["status"] = result.value
 
 	def setResult(self, value):
