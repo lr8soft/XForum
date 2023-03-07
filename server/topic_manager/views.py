@@ -15,14 +15,14 @@ def create_new_topic(request):
         response.setResult(CommonEnum.ErrorResponse.NOT_LOGIN)
         return response.getResponse()
 
-    title = request.session.get("title")
-    article = request.session.get("article")
+    title = request.POST.get("title")
+    article = request.POST.get("article")
     # 检测输入是否完整
     if not title or not article:
         response.setResult(CommonEnum.ErrorResponse.INCOMPLETE_DATA)
         return response.getResponse()
 
-    user = SessionUtils.GetUser()
+    user = SessionUtils.GetUser(request)
 
     try:
         newTopic = Topic.objects.create(title=title, author=user)
