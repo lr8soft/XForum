@@ -6,8 +6,8 @@
           <router-link v-bind:to='"/topic/"+scope.row.id'>{{scope.row.title}}</router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="用户" width="180" align="left" />
-      <el-table-column prop="date" label="日期" width="180" align="left"/>
+      <el-table-column prop="author" label="用户" width="180" align="left" />
+      <el-table-column prop="date" label="日期" width="240" align="left"/>
 
     </el-table>
 
@@ -46,9 +46,22 @@
 import serviceApi from "@/services/serviceApi";
 import {ElMessage} from "element-plus";
 import {useGlobalData} from "@/services/globalData";
+import {getCurrentInstance, onMounted} from "vue";
 
 export default {
   name: "ThreadComp",
+  setup(){
+    const instance = getCurrentInstance();
+    onMounted(()=>{
+      serviceApi.GetAllTopics().then(response=>{
+        var result = serviceApi.GetApiResult(response)
+        console.log(response)
+        if(result){
+          instance.data.topicData = response.result
+        }
+      })
+    })
+  },
   data() {
     return {
       currentPage: 1,
@@ -59,16 +72,10 @@ export default {
       },
       topicData: [
         {
-          date: '2023-03-02',
-          name: 'LT_',
+          date: '2023-03-07T00:50:10.308Z',
+          author: 'LT_',
           title: '测试测试',
           id: 0
-        },
-        {
-          date: '2023-03-02',
-          name: 'lrsoft',
-          title: 'Hello world',
-          id: 1
         }
       ],
       userData: useGlobalData()

@@ -30,7 +30,12 @@ export default {
             data: formData
         })
     },
-
+    GetAllTopics(){
+        return requestHelper({
+            url: urlHead + "/topic/get_all_topics",
+            method: "post"
+        })
+    },
 
     GetApiResult(response){
         if(response.status == "operation_success")
