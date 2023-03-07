@@ -1,6 +1,6 @@
 <template>
   <div id="thread-body">
-    <el-table :data="tableData" >
+    <el-table :data="topicData" >
       <el-table-column prop="title" label="标题" align="left">
         <template #default="scope">
           <router-link v-bind:to='"/topic/"+scope.row.id'>{{scope.row.title}}</router-link>
@@ -10,6 +10,17 @@
       <el-table-column prop="date" label="日期" width="180" align="left"/>
 
     </el-table>
+
+    <div style="margin: 10px 0">
+      <el-pagination
+          v-model:current-page="currentPage"
+          background
+          layout="prev, pager, next, jumper"
+          :total="topicCount"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 
   <el-card class="create-topic-card">
@@ -40,11 +51,13 @@ export default {
   name: "ThreadComp",
   data() {
     return {
+      currentPage: 1,
+      topicCount: 20,
       formData: {
         title: '',
         article: ''
       },
-      tableData: [
+      topicData: [
         {
           date: '2023-03-02',
           name: 'LT_',
@@ -79,6 +92,12 @@ export default {
         }
 
       })
+    },
+    handleSizeChange(val){
+      console.log(`${val} items per page`)
+    },
+    handleCurrentChange(val){
+      console.log(`current page: ${val}`)
     }
   }
 }
