@@ -1,9 +1,10 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import App from './App.vue'
+// pinia与持久化插件
 import { createPinia } from 'pinia'
 import piniaPluginPersist from "pinia-plugin-persist";
-
+// element-ui-plus相关
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/index.css'
 

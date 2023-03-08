@@ -33,7 +33,7 @@
                 </el-aside>
                 <!--右边回复区域-->
                 <el-main>
-                  <p class="article-area">{{ scope.row.article }}</p>
+                  <p class="article-area" v-html="scope.row.article" />
                 </el-main>
               </el-container>
             </template>
@@ -59,12 +59,15 @@
             <span>发表回复</span>
           </div>
         </template>
+
         <el-input
+            style="white-space: pre-wrap;"
             v-model="replyFormData.reply"
             :autosize="{ minRows: 4}"
             type="textarea"
             placeholder="发表你的看法"
         />
+
         <el-button class="create-reply-button" type="primary" @click="submitMessage" :disabled="!userData.isLogin">发布</el-button>
       </el-card>
     </el-main>
@@ -73,7 +76,7 @@
 </template>
 
 <script>
-import {getCurrentInstance, onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, shallowRef} from "vue";
 import {ElMessage} from "element-plus";
 import serviceApi from "@/services/serviceApi";
 import {useRoute} from "vue-router";
@@ -82,6 +85,7 @@ import {useGlobalData} from "@/services/globalData";
 export default {
   name: "TopicComp",
   setup(){
+
     const route = useRoute()
     const instance = getCurrentInstance()
     onMounted(()=>{
@@ -106,7 +110,8 @@ export default {
         id: 0,
         reply:''
       },
-      userData: useGlobalData()
+      userData: useGlobalData(),
+      editorRef: shallowRef()
     }
   },
   methods:{
@@ -115,6 +120,9 @@ export default {
     },
     handleCurrentChange(val){
       console.log(`current page: ${val}`)
+    },
+    handleCreated(editor){
+      this.editorRef.value = editor
     },
     submitMessage(){
       // 在帖子下创建新回复

@@ -62,6 +62,8 @@ def create_new_reply(request):
         response.setStatus(CommonEnum.ErrorResponse.TOPIC_NOT_EXIST)
         return response.getResponse()
 
+    reply = str(reply).replace(r'\n', '<br/>').replace(r'\r\n', '<br/>').replace(' ', '&nbsp;')
+
     try:
         # 新回复楼层自动+1
         newFloor = topic.currentfloor + 1
