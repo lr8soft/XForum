@@ -60,13 +60,17 @@
           </div>
         </template>
 
+        <RichTextComp :text="replyFormData.reply"/>
+        <!--
         <el-input
-            style="white-space: pre-wrap;"
+            style="white-space: pre-wrap"
             v-model="replyFormData.reply"
             :autosize="{ minRows: 4}"
             type="textarea"
             placeholder="发表你的看法"
         />
+        -->
+
 
         <el-button class="create-reply-button" type="primary" @click="submitMessage" :disabled="!userData.isLogin">发布</el-button>
       </el-card>
@@ -81,9 +85,11 @@ import {ElMessage} from "element-plus";
 import serviceApi from "@/services/serviceApi";
 import {useRoute} from "vue-router";
 import {useGlobalData} from "@/services/globalData";
+import RichTextComp from "@/components/RichTextComp.vue";
 
 export default {
   name: "TopicComp",
+  components: {RichTextComp},
   setup(){
 
     const route = useRoute()
@@ -126,6 +132,7 @@ export default {
     },
     submitMessage(){
       // 在帖子下创建新回复
+      alert(this.replyFormData.id + "\n" + this.replyFormData.reply)
       serviceApi.CreateNewReply(this.replyFormData).then(response=>{
         if(serviceApi.GetApiResult(response)){
           ElMessage({
