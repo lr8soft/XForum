@@ -33,7 +33,10 @@
                 </el-aside>
                 <!--右边回复区域-->
                 <el-main>
-                  <p class="article-area" v-html="scope.row.article" />
+                  <RichTextComp class="article-area" v-model="scope.row.article" :editable="false"/>
+                  <!--
+                                    <p class="article-area" v-html="scope.row.article" />
+                  -->
                 </el-main>
               </el-container>
             </template>
@@ -60,17 +63,7 @@
           </div>
         </template>
 
-        <RichTextComp :text="replyFormData.reply"/>
-        <!--
-        <el-input
-            style="white-space: pre-wrap"
-            v-model="replyFormData.reply"
-            :autosize="{ minRows: 4}"
-            type="textarea"
-            placeholder="发表你的看法"
-        />
-        -->
-
+        <RichTextComp v-model="replyFormData.reply" />
 
         <el-button class="create-reply-button" type="primary" @click="submitMessage" :disabled="!userData.isLogin">发布</el-button>
       </el-card>
@@ -80,7 +73,7 @@
 </template>
 
 <script>
-import {getCurrentInstance, onMounted, shallowRef} from "vue";
+import {getCurrentInstance, onMounted, reactive, ref, shallowRef} from "vue";
 import {ElMessage} from "element-plus";
 import serviceApi from "@/services/serviceApi";
 import {useRoute} from "vue-router";
@@ -114,7 +107,7 @@ export default {
       replies: [],
       replyFormData:{
         id: 0,
-        reply:''
+        reply: ''
       },
       userData: useGlobalData(),
       editorRef: shallowRef()
@@ -132,7 +125,6 @@ export default {
     },
     submitMessage(){
       // 在帖子下创建新回复
-      alert(this.replyFormData.id + "\n" + this.replyFormData.reply)
       serviceApi.CreateNewReply(this.replyFormData).then(response=>{
         if(serviceApi.GetApiResult(response)){
           ElMessage({

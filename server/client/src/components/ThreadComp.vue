@@ -31,12 +31,7 @@
     </template>
     <el-input v-model="formData.title" placeholder="标题"/>
     <div style="margin: 5px 0" />
-    <el-input
-        v-model="formData.article"
-        :autosize="{ minRows: 4}"
-        type="textarea"
-        placeholder="内容"
-    />
+    <RichTextComp v-model="formData.article" />
     <div style="margin: 5px 0" />
     <el-button type="primary" @click="submitNewTopic" :disabled="!userData.isLogin">发布</el-button>
   </el-card>
@@ -47,9 +42,11 @@ import serviceApi from "@/services/serviceApi";
 import {ElMessage} from "element-plus";
 import {useGlobalData} from "@/services/globalData";
 import {getCurrentInstance, onMounted} from "vue";
+import RichTextComp from "@/components/RichTextComp.vue";
 
 export default {
   name: "ThreadComp",
+  components: {RichTextComp},
   setup(){
     const instance = getCurrentInstance();
     onMounted(()=>{

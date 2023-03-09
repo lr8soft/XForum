@@ -1,5 +1,5 @@
 <template>
-  <div style="border: 1px solid #ccc">
+  <div v-if="editable" style="border: 1px solid #ccc">
     <Toolbar
         style="border-bottom: 1px solid #ccc"
         :editor="editorRef"
@@ -9,6 +9,16 @@
     />
     <Editor
         style="height: 300px; overflow-y: hidden;"
+        v-model="valueHtml"
+        :defaultConfig="editorConfig"
+        :mode="mode"
+        @onCreated="handleCreated"
+        @onChange="userInput"
+    />
+  </div>
+  <div v-else>
+    <Editor
+        class="readonly-editor"
         v-model="valueHtml"
         :defaultConfig="editorConfig"
         :mode="mode"
@@ -28,12 +38,15 @@ export default defineComponent({
   name: "RichTextComp",
   components: { Editor, Toolbar },
   props: {
-    text: String,
+    modelValue: String,
     editable: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
+  emits:[
+    'update:modelValue'
+  ],
   setup(props, ctx) {
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef()
@@ -58,17 +71,18 @@ export default defineComponent({
 
     // 父容器值更新就更新里面的
     watch(props,(newVal,oldVal) => {
-      valueHtml.value = props.text;
+      valueHtml.value = props.modelValue;
+      editorConfig.readOnly = !props.editable
     },{immediate:true})
 
     const userInput = (editor)=>{
-      ctx.emit('update:text', valueHtml.value)
+      ctx.emit('update:modelValue', valueHtml.value)
     }
 
     return {
       editorRef,
       valueHtml,
-      mode: 'default',
+      mode: 'simple',
       toolbarConfig,
       editorConfig,
       handleCreated,
@@ -79,7 +93,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.border {
-  border: 1px solid #ddd;
+.readonly-editor{
+  --w-e-textarea-bg-color: transparent;
+  --w-e-textarea-border-color: transparent;
+
+  overflow-y: hidden;
 }
 </style>
