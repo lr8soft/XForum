@@ -138,3 +138,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 分页器 每页默认返回多少项
+
+PAGINATOR_ITEM_PER_PAGE = 10

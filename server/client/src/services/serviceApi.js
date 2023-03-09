@@ -30,10 +30,18 @@ export default {
             data: formData
         })
     },
-    GetAllTopics(){
+    GetPaginationTopics(pageNum){
         return requestHelper({
-            url: urlHead + "/topic/get_all_topics",
-            method: "post"
+            url: urlHead + "/topic/get_pagination_topics",
+            method: "post",
+            data: {pageNum: pageNum}
+        })
+    },
+    GetPaginationReplies(topicId, pageNum){
+        return requestHelper({
+            url: urlHead + "/topic/get_pagination_topic_replies",
+            method: "post",
+            data : {id: topicId, pageNum: pageNum}
         })
     },
     GetAllReplies(topicId){
@@ -81,5 +89,6 @@ var statusExplain = {
     "parse_error": "服务器响应格式有误" ,
     "invalid_argument": "参数错误" ,
     "comment_not_exist": "回复不存在",
-    "topic_not_exist": "帖子不存在"
+    "topic_not_exist": "帖子不存在",
+    "page_out_of_range": "页码超出范围"
 }

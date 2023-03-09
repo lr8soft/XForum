@@ -22,3 +22,4 @@ class ErrorResponse(Enum):
 	OPERATION_FAIL = "operation_fail"
 
 	TOPIC_NOT_EXIST = "topic_not_exist"
+	PAGE_OUT_OF_RANGE = "page_out_of_range"

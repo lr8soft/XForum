@@ -47,8 +47,8 @@
           <el-pagination
               v-model:current-page="currentPage"
               layout="prev, pager, next, jumper"
-              :total="repliesCount"
-              @size-change="handleSizeChange"
+              :page-count="pageCount"
+              :page-size="pageItemCount"
               @current-change="handleCurrentChange"
           />
         </div>
@@ -83,26 +83,18 @@ import RichTextComp from "@/components/RichTextComp.vue";
 export default {
   name: "TopicComp",
   components: {RichTextComp},
-  setup(){
-
+  mounted() {
     const route = useRoute()
-    const instance = getCurrentInstance()
-    onMounted(()=>{
-      var topicId = route.params.id
-      instance.data.replyFormData.id = topicId
-      // 读取主题下面的帖子
-      serviceApi.GetAllReplies(topicId).then(response=>{
-        if(serviceApi.GetApiResult(response)){
-          instance.data.replies = response.result
-          instance.data.repliesCount = response.result.length
-        }
-      })
-    })
+    var topicId = route.params.id
+    this.replyFormData.id = topicId
+    this.getPaginationReplies()
   },
   data(){
     return {
       title: "测试主题",
       currentPage: 1,
+      pageCount: 0,
+      pageItemCount: 0,
       repliesCount: 0,
       replies: [],
       replyFormData:{
@@ -114,14 +106,24 @@ export default {
     }
   },
   methods:{
-    handleSizeChange(val){
-      console.log(`${val} items per page`)
-    },
     handleCurrentChange(val){
-      console.log(`current page: ${val}`)
+      this.currentPage = val
+      this.getPaginationReplies()
     },
     handleCreated(editor){
       this.editorRef.value = editor
+    },
+    getPaginationReplies(){
+      // 读取主题下面的帖子
+      serviceApi.GetPaginationReplies(this.replyFormData.id, this.currentPage).then(response=>{
+        if(serviceApi.GetApiResult(response)){
+          this.title = response.result.title
+          this.pageCount = response.result.pageCount
+          this.pageItemCount = response.result.pageItemCount
+          this.replies = response.result.replies
+          this.repliesCount = response.result.replies.length
+        }
+      })
     },
     submitMessage(){
       // 在帖子下创建新回复

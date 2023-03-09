@@ -16,8 +16,8 @@
           v-model:current-page="currentPage"
           background
           layout="prev, pager, next, jumper"
-          :total="topicCount"
-          @size-change="handleSizeChange"
+          :page-count="pageCount"
+          :page-size="pageItemCount"
           @current-change="handleCurrentChange"
       />
     </div>
@@ -41,28 +41,19 @@
 import serviceApi from "@/services/serviceApi";
 import {ElMessage} from "element-plus";
 import {useGlobalData} from "@/services/globalData";
-import {getCurrentInstance, onMounted} from "vue";
 import RichTextComp from "@/components/RichTextComp.vue";
 
 export default {
   name: "ThreadComp",
   components: {RichTextComp},
-  setup(){
-    const instance = getCurrentInstance();
-    onMounted(()=>{
-      serviceApi.GetAllTopics().then(response=>{
-        var result = serviceApi.GetApiResult(response)
-        if(result){
-          instance.data.topicData = response.result
-          instance.data.topicCount = response.result.length
-        }
-      })
-    })
+  mounted() {
+    this.handlePageChange()
   },
   data() {
     return {
       currentPage: 1,
-      topicCount: 0,
+      pageCount: 0,
+      pageItemCount: 0,
       formData: {
         title: '',
         article: ''
@@ -90,11 +81,20 @@ export default {
 
       })
     },
-    handleSizeChange(val){
-      console.log(`${val} items per page`)
-    },
     handleCurrentChange(val){
-      console.log(`current page: ${val}`)
+      this.currentPage = val
+      this.handlePageChange()
+    },
+    handlePageChange(){
+      // 默认读取currentPage页
+      serviceApi.GetPaginationTopics(this.currentPage).then(response=>{
+        var result = serviceApi.GetApiResult(response)
+        if(result){
+          this.pageCount = response.result.pageCount
+          this.pageItemCount = response.result.pageItemCount
+          this.topicData = response.result.topics
+        }
+      })
     }
   }
 }

@@ -1,18 +1,22 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from common import SessionUtils, CommonEnum, ModelUtils
 from common.ResponseUtils import EnumResponse
-from topic_manager.models import Topic, Reply
+from core import settings
+from topic_manager.models import Reply
+
 
 
 @require_http_methods(['POST'])
-def get_topic_replies(request):
+def get_pagination_topic_replies(request):
     response = EnumResponse()
-
+    # 页码默认是1
+    pageNum = request.POST.get("pageNum")
     topicId = request.POST.get("id")
     # 检测输入完整
-    if not topicId:
+    if not topicId or not pageNum or not pageNum.isdigit():
         response.setStatus(CommonEnum.ErrorResponse.INCOMPLETE_DATA)
         return response.getResponse()
 
@@ -22,18 +26,36 @@ def get_topic_replies(request):
         response.setStatus(CommonEnum.ErrorResponse.TOPIC_NOT_EXIST)
         return response.getResponse()
 
-    # 过滤主题下所有回复
+    pageNum = int(pageNum)
     try:
-        replies = Reply.objects.filter(topic=topic)
-        result = []
-        for r in replies:
+        # 过滤主题下所有回复
+        paginator = Paginator(Reply.objects.filter(topic=topic), settings.PAGINATOR_ITEM_PER_PAGE)
+        pageCount = paginator.num_pages
+        # 检测页码是否超出范围,[1,n]
+        if pageNum < 1 or pageNum > pageCount:
+            response.setStatus(CommonEnum.ErrorResponse.PAGE_OUT_OF_RANGE)
+            return response.getResponse()
+
+        result = {}
+        result["title"] = topic.title
+        result["pageCount"] = pageCount
+        result["pageItemCount"] = settings.PAGINATOR_ITEM_PER_PAGE
+        # 读指定页的所有内容
+        page = paginator.page(pageNum)
+        pageReplies = []
+        for r in page:
             avatarPath = r.author.avatar.path if r.author.avatar is None else ""
             reply = {"id": r.id, "article": r.article, "author": r.author.username, "floor": r.floor, "avatar": avatarPath}
-            result.append(reply)
+            pageReplies.append(reply)
+
+        result["replies"] = pageReplies
         response.setResult(result)
+
     except Exception as error:
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
-        print(error)
+        print("get_pagination_topics ERROR:" + error.__str__())
+
+
 
     return response.getResponse()
 
