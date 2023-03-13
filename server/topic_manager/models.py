@@ -24,6 +24,7 @@ class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=False)
     floor = models.IntegerField(null=False)
+    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return "id:" + self.id + " article:" + self.article + " author:" + self.author + " floor:" + self.floor

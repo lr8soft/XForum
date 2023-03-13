@@ -32,12 +32,17 @@
                   <p class="floor-info">{{ scope.row.floor }}#</p>
                 </el-aside>
                 <!--右边回复区域-->
-                <el-main>
+                <el-main style="position: relative;">
                   <RichTextComp class="article-area" v-model="scope.row.article" :editable="false"/>
-                  <div style="margin: 5px 0px 5px 0px;">
-                    <el-button v-if="scope.row.author==userData.userName || author==userData.userName"
-                       style="float: right;"
-                       @click='DeleteReply(scope.row.id)'>删除</el-button>
+                  <div class="article-info-area">
+                    <div style="float:right;">
+                      发布于 {{scope.row.date}}
+                      <el-button
+                          link type="primary"
+                          v-if="(scope.row.author==userData.userName || author==userData.userName) && scope.row.floor > 1"
+                          @click='DeleteReply(scope.row.id)'>删除</el-button>
+                    </div>
+
                   </div>
                 </el-main>
               </el-container>
@@ -224,6 +229,13 @@ export default {
 .article-area{
   width: 90%;
   margin: auto;
+}
+
+.article-info-area{
+  position: absolute;
+  width: 90%;
+  bottom: 0;
+  right: 0;
 }
 
 .author-info{

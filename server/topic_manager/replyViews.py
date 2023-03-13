@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.utils.timezone import localtime
 from django.views.decorators.http import require_http_methods
 
 from common import SessionUtils, CommonEnum, ModelUtils
@@ -45,7 +46,8 @@ def get_pagination_topic_replies(request):
         pageReplies = []
         for r in page:
             avatarPath = r.author.avatar.path if r.author.avatar is None else ""
-            reply = {"id": r.id, "article": r.article, "author": r.author.username, "floor": r.floor, "avatar": avatarPath}
+            reply = {"id": r.id, "article": r.article, "author": r.author.username,
+                     "floor": r.floor, "avatar": avatarPath, "date": localtime(r.date).strftime("%Y-%m-%d %H:%I:%S")}
             pageReplies.append(reply)
 
         result["replies"] = pageReplies
@@ -115,8 +117,12 @@ def delete_reply(request):
 
     currentUser = SessionUtils.GetUser(request)
     # 只有主题作者或者本人才能删除
-    if reply.author == currentUser or reply.topic.author == currentUser:
-        reply.delete()
-    else:
+    if reply.author != currentUser and reply.topic.author != currentUser:
         response.setStatus(CommonEnum.ErrorResponse.PERMISSION_DENIED)
+    else:
+        # 主题内容不能删除
+        if reply.floor <= 1:
+            response.setStatus(CommonEnum.ErrorResponse.CAN_NOT_DELETE_THEME_CONTENT)
+        else:
+            reply.delete()
     return response.getResponse()

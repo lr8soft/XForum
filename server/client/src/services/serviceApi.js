@@ -90,5 +90,6 @@ var statusExplain = {
     "invalid_argument": "参数错误" ,
     "reply_not_exist": "回复不存在",
     "topic_not_exist": "帖子不存在",
-    "page_out_of_range": "页码超出范围"
+    "page_out_of_range": "页码超出范围",
+    "can_not_delete_theme_content": "无法删除主题内容"
 }

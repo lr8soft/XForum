@@ -24,3 +24,5 @@ class ErrorResponse(Enum):
 	TOPIC_NOT_EXIST = "topic_not_exist"
 	REPLY_NOT_EXIST = "reply_not_exist"
 	PAGE_OUT_OF_RANGE = "page_out_of_range"
+
+	CAN_NOT_DELETE_THEME_CONTENT = "can_not_delete_theme_content"
