@@ -44,18 +44,18 @@ export default {
             data : {id: topicId, pageNum: pageNum}
         })
     },
-    GetAllReplies(topicId){
-        return requestHelper({
-            url: urlHead + "/topic/get_topic_replies",
-            method: "post",
-            data : {id: topicId}
-        })
-    },
     CreateNewReply(formData){
         return requestHelper({
             url: urlHead + "/topic/create_new_reply",
             method: "post",
             data: formData
+        })
+    },
+    DeleteReply(replyId){
+        return requestHelper({
+            url: urlHead + "/topic/delete_reply",
+            method: "post",
+            data: { id: replyId }
         })
     },
 
@@ -88,7 +88,7 @@ var statusExplain = {
     "incomplete_data": "输入数据不完整",
     "parse_error": "服务器响应格式有误" ,
     "invalid_argument": "参数错误" ,
-    "comment_not_exist": "回复不存在",
+    "reply_not_exist": "回复不存在",
     "topic_not_exist": "帖子不存在",
     "page_out_of_range": "页码超出范围"
 }

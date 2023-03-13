@@ -82,7 +82,7 @@ export default defineComponent({
     return {
       editorRef,
       valueHtml,
-      mode: 'simple',
+      mode: 'default',
       toolbarConfig,
       editorConfig,
       handleCreated,

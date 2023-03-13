@@ -8,7 +8,6 @@ from core import settings
 from topic_manager.models import Reply
 
 
-
 @require_http_methods(['POST'])
 def get_pagination_topic_replies(request):
     response = EnumResponse()
@@ -37,6 +36,7 @@ def get_pagination_topic_replies(request):
             return response.getResponse()
 
         result = {}
+        result['author'] = topic.author.username
         result["title"] = topic.title
         result["pageCount"] = pageCount
         result["pageItemCount"] = settings.PAGINATOR_ITEM_PER_PAGE
@@ -58,7 +58,6 @@ def get_pagination_topic_replies(request):
 
 
     return response.getResponse()
-
 
 
 @require_http_methods(['POST'])
@@ -93,4 +92,31 @@ def create_new_reply(request):
     except:
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
 
+    return response.getResponse()
+
+
+@require_http_methods(['POST'])
+def delete_reply(request):
+    response = EnumResponse()
+    # 检测是否登录
+    if not SessionUtils.IsLogin(request):
+        response.setStatus(CommonEnum.ErrorResponse.NOT_LOGIN)
+        return response.getResponse()
+    # 检测输入完整
+    replyId = request.POST.get("id")
+    if not replyId:
+        response.setStatus(CommonEnum.ErrorResponse.INCOMPLETE_DATA)
+        return response.getResponse()
+    # 回复是否存在
+    reply = ModelUtils.GetReply(replyId)
+    if not reply:
+        response.setStatus(CommonEnum.ErrorResponse.REPLY_NOT_EXIST)
+        return response.getResponse()
+
+    currentUser = SessionUtils.GetUser(request)
+    # 只有主题作者或者本人才能删除
+    if reply.author == currentUser or reply.topic.author == currentUser:
+        reply.delete()
+    else:
+        response.setStatus(CommonEnum.ErrorResponse.PERMISSION_DENIED)
     return response.getResponse()

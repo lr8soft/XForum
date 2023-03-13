@@ -34,9 +34,11 @@
                 <!--右边回复区域-->
                 <el-main>
                   <RichTextComp class="article-area" v-model="scope.row.article" :editable="false"/>
-                  <!--
-                                    <p class="article-area" v-html="scope.row.article" />
-                  -->
+                  <div style="margin: 5px 0px 5px 0px;">
+                    <el-button v-if="scope.row.author==userData.userName || author==userData.userName"
+                       style="float: right;"
+                       @click='DeleteReply(scope.row.id)'>删除</el-button>
+                  </div>
                 </el-main>
               </el-container>
             </template>
@@ -55,7 +57,7 @@
 
       </el-card>
 
-      <!--这是用户回复区，一页显示10个回复-->
+      <!--这是用户回复区-->
       <el-card class="create-reply-card">
         <template #header>
           <div class="card-header">
@@ -82,6 +84,11 @@ import RichTextComp from "@/components/RichTextComp.vue";
 
 export default {
   name: "TopicComp",
+  computed: {
+    serviceApi() {
+      return serviceApi
+    }
+  },
   components: {RichTextComp},
   mounted() {
     const route = useRoute()
@@ -92,6 +99,7 @@ export default {
   data(){
     return {
       title: "测试主题",
+      author: '',
       currentPage: 1,
       pageCount: 0,
       pageItemCount: 0,
@@ -117,6 +125,7 @@ export default {
       // 读取主题下面的帖子
       serviceApi.GetPaginationReplies(this.replyFormData.id, this.currentPage).then(response=>{
         if(serviceApi.GetApiResult(response)){
+          this.author = response.result.author
           this.title = response.result.title
           this.pageCount = response.result.pageCount
           this.pageItemCount = response.result.pageItemCount
@@ -140,8 +149,22 @@ export default {
           })
         }
       })
-
-
+    },
+    DeleteReply(Id){
+      serviceApi.DeleteReply(Id).then((response)=>{
+        if(serviceApi.GetApiResult(response)){
+          ElMessage({
+            message: "回复已删除",
+            type: 'success'
+          })
+          this.$router.go(0)
+        }else{
+          ElMessage({
+            message: serviceApi.GetApiResultExplain(response),
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }

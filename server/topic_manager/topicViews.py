@@ -8,6 +8,7 @@ from common.ResponseUtils import EnumResponse
 from core import settings
 from topic_manager.models import Topic, Reply
 
+
 # Create your views here.
 @require_http_methods(['POST'])
 def create_new_topic(request):
@@ -31,25 +32,6 @@ def create_new_topic(request):
         firstReply = Reply.objects.create(article=article, author=user, topic=newTopic, floor=1)
     except:
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
-
-    return response.getResponse()
-
-
-@require_http_methods(['POST'])
-def get_all_topics(request):
-    response = EnumResponse()
-
-    try:
-        topics = Topic.objects.all()
-        result = []
-        for t in topics:
-            info = {"id": t.id, "title": t.title, "author": t.author.username, "repliesCount": t.repliesCount,
-                    "date": localtime(t.date).strftime("%Y-%m-%d %H:%I:%S")}
-            result.append(info)
-        response.setResult(result)
-    except Exception as e:
-        response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
-        print(e)
 
     return response.getResponse()
 
@@ -92,4 +74,31 @@ def get_pagination_topics(request):
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
         print("get_pagination_topics ERROR:" + error.__str__())
 
+    return response.getResponse()
+
+
+@require_http_methods(['POST'])
+def delete_topic(request):
+    response = EnumResponse()
+    # 检测是否登录
+    if not SessionUtils.IsLogin(request):
+        response.setStatus(CommonEnum.ErrorResponse.NOT_LOGIN)
+        return response.getResponse()
+    # 检测输入完整
+    topicId = request.POST.get("id")
+    if not topicId:
+        response.setStatus(CommonEnum.ErrorResponse.INCOMPLETE_DATA)
+        return response.getResponse()
+    # 主题是否存在
+    topic = ModelUtils.GetTopic(topicId)
+    if not topic:
+        response.setStatus(CommonEnum.ErrorResponse.TOPIC_NOT_EXIST)
+        return response.getResponse()
+
+    currentUser = SessionUtils.GetUser(request)
+    # 只有主题作者才能删除
+    if topic.author == currentUser:
+        topic.delete()
+    else:
+        response.setStatus(CommonEnum.ErrorResponse.PERMISSION_DENIED)
     return response.getResponse()

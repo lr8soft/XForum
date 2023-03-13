@@ -5,8 +5,10 @@ from . import topicViews, replyViews
 urlpatterns = [
     path("create_new_topic", topicViews.create_new_topic),
     path("get_pagination_topics", topicViews.get_pagination_topics),
+    path("delete_topic", topicViews.delete_topic),
 
     path("get_pagination_topic_replies", replyViews.get_pagination_topic_replies),
     path("create_new_reply", replyViews.create_new_reply),
+    path("delete_reply", replyViews.delete_reply),
 
 ]

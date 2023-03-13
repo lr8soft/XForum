@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+from common import PermissionUtils
 from user_manager.models import User
 
 

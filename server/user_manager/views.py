@@ -68,6 +68,7 @@ def login(request):
 
 @require_http_methods(['POST'])
 def logout(request):
-    SessionUtils.SetIsLogin(request, False)
     response = EnumResponse()
+    SessionUtils.SetIsLogin(request, False, SessionUtils.GetUser(request).username)
+
     return response.getResponse()

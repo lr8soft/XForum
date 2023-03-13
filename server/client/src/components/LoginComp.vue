@@ -41,6 +41,7 @@ export default {
             var result = serviceApi.GetApiResult(response)
             this.userData.setIsLogin(serviceApi.GetApiResult(response))
             if(result){
+              this.userData.setUserName(this.formData.username)
               ElMessage({
                 message: "登录成功",
                 type: 'success'

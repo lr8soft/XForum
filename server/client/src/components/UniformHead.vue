@@ -13,7 +13,16 @@
       </el-menu-item>
       <el-menu-item index="3">分区</el-menu-item>
       <el-menu-item index="4">
-        <router-link to="/userinfo" v-if="userData.isLogin">个人空间</router-link>
+        <el-sub-menu v-if="userData.isLogin">
+          <template #title>账号信息</template>
+          <el-menu-item>
+            <router-link to="/userinfo">个人空间</router-link>
+          </el-menu-item>
+          <el-menu-item>
+            <router-link to="/logout">登出</router-link>
+          </el-menu-item>
+        </el-sub-menu>
+
         <router-link to="/login" v-else>登录</router-link>
       </el-menu-item>
 
