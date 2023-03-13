@@ -7,7 +7,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="author" label="用户" width="180" align="left" />
-      <el-table-column prop="date" label="日期" width="240" align="left"/>
+      <el-table-column prop="date" label="日期" width="240" align="left">
+        <template #default="scope">
+          {{dayjs(scope.row.date).format("YYYY-MM-DD HH:mm:ss")}}
+        </template>
+      </el-table-column>
 
     </el-table>
 
@@ -42,9 +46,15 @@ import serviceApi from "@/services/serviceApi";
 import {ElMessage} from "element-plus";
 import {useGlobalData} from "@/services/globalData";
 import RichTextComp from "@/components/RichTextComp.vue";
+import dayjs from "dayjs";
 
 export default {
   name: "ThreadComp",
+  computed: {
+    dayjs() {
+      return dayjs
+    }
+  },
   components: {RichTextComp},
   mounted() {
     this.handlePageChange()

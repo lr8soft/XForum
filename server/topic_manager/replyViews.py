@@ -49,7 +49,7 @@ def get_pagination_topic_replies(request):
         for r in page:
             avatarPath = r.author.avatar.path if r.author.avatar is None else ""
             reply = {"id": r.id, "article": r.article, "author": r.author.username,
-                     "floor": r.floor, "avatar": avatarPath, "date": localtime(r.date).strftime("%Y-%m-%d %H:%I:%S")}
+                     "floor": r.floor, "avatar": avatarPath, "date": r.date}
             pageReplies.append(reply)
 
         result["replies"] = pageReplies
@@ -90,7 +90,7 @@ def create_new_reply(request):
     try:
         # 新回复楼层自动+1
         newFloor = topic.currentfloor + 1
-        Reply.objects.create(article=reply, author=user, topic=topic, floor=newFloor, date=timezone.now)
+        Reply.objects.create(article=reply, author=user, topic=topic, floor=newFloor)
         topic.currentfloor = newFloor
         topic.save()
     except:

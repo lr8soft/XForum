@@ -36,7 +36,7 @@
                   <RichTextComp class="article-area" v-model="scope.row.article" :editable="false"/>
                   <div class="article-info-area">
                     <div style="float:right;">
-                      发布于 {{scope.row.date}}
+                      发布于 {{dayjs(scope.row.date).format("YYYY-MM-DD HH:mm:ss")}}
                       <el-button
                           link type="primary"
                           v-if="(scope.row.author==userData.userName || author==userData.userName) && scope.row.floor > 1"
@@ -80,16 +80,20 @@
 </template>
 
 <script>
-import {getCurrentInstance, onMounted, reactive, ref, shallowRef} from "vue";
+import { shallowRef} from "vue";
 import {ElMessage} from "element-plus";
 import serviceApi from "@/services/serviceApi";
 import {useRoute} from "vue-router";
 import {useGlobalData} from "@/services/globalData";
 import RichTextComp from "@/components/RichTextComp.vue";
+import dayjs from "dayjs";
 
 export default {
   name: "TopicComp",
   computed: {
+    dayjs() {
+      return dayjs
+    },
     serviceApi() {
       return serviceApi
     }

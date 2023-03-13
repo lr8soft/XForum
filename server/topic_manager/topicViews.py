@@ -29,8 +29,8 @@ def create_new_topic(request):
     user = SessionUtils.GetUser(request)
 
     try:
-        newTopic = Topic.objects.create(title=title, author=user, currentfloor=1, repliesCount=1, date=timezone.now)
-        firstReply = Reply.objects.create(article=article, author=user, topic=newTopic, floor=1, date=timezone.now)
+        newTopic = Topic.objects.create(title=title, author=user, currentfloor=1, repliesCount=1)
+        firstReply = Reply.objects.create(article=article, author=user, topic=newTopic, floor=1)
     except Exception as error:
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
         print(error)
@@ -66,7 +66,7 @@ def get_pagination_topics(request):
         pageTopics = []
         for topic in page:
             info = {"id": topic.id, "title": topic.title, "author": topic.author.username, "repliesCount": topic.repliesCount,
-                    "date": localtime(topic.date).strftime("%Y-%m-%d %H:%I:%S")}
+                    "date": topic.date}
             pageTopics.append(info)
 
         result["topics"] = pageTopics

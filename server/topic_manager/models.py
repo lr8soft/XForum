@@ -12,7 +12,7 @@ class Topic(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     currentfloor = models.IntegerField(default=0)
     repliesCount = models.IntegerField(default=0)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "id:" + self.id + " title:" + self.title + " author:" + self.author + " reoliescount:" + self.repliesCount
@@ -24,7 +24,7 @@ class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=False)
     floor = models.IntegerField(null=False)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "id:" + self.id + " article:" + self.article + " author:" + self.author + " floor:" + self.floor
