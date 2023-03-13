@@ -1,3 +1,5 @@
+
+from django.utils import timezone
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.utils.timezone import localtime
@@ -88,7 +90,7 @@ def create_new_reply(request):
     try:
         # 新回复楼层自动+1
         newFloor = topic.currentfloor + 1
-        Reply.objects.create(article=reply, author=user, topic=topic, floor=newFloor)
+        Reply.objects.create(article=reply, author=user, topic=topic, floor=newFloor, date=timezone.now)
         topic.currentfloor = newFloor
         topic.save()
     except:

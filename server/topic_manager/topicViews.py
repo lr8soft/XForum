@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from django.utils.timezone import localtime
 from django.core.paginator import Paginator
@@ -28,10 +29,11 @@ def create_new_topic(request):
     user = SessionUtils.GetUser(request)
 
     try:
-        newTopic = Topic.objects.create(title=title, author=user, currentfloor=1, repliesCount=1)
-        firstReply = Reply.objects.create(article=article, author=user, topic=newTopic, floor=1)
-    except:
+        newTopic = Topic.objects.create(title=title, author=user, currentfloor=1, repliesCount=1, date=timezone.now)
+        firstReply = Reply.objects.create(article=article, author=user, topic=newTopic, floor=1, date=timezone.now)
+    except Exception as error:
         response.setStatus(CommonEnum.ErrorResponse.OPERATION_FAIL)
+        print(error)
 
     return response.getResponse()
 
